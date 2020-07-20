@@ -10,6 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 public class Payment implements Serializable {
-    private long id;
+    private Long id;
     private String serial;
 }

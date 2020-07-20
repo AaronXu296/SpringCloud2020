@@ -16,7 +16,7 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public Payment getPaymentById(long id) {
+    public Payment getPaymentById(Long id) {
         return paymentDao.getPaymentById(id);
     }
 }
