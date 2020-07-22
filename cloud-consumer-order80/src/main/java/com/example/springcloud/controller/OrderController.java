@@ -4,6 +4,7 @@ import com.example.springcloud.entities.CommonResult;
 import com.example.springcloud.entities.Payment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 public class OrderController {
     @Autowired
     private RestTemplate restTemplate;
-    public static String PAYMENT_URL = "http://localhost:8001";
+    public static String PAYMENT_URL = "http://CLOUD-PAYMENT-SERVICE";
 
     @GetMapping(value = "/consumer/payment/create")
     public CommonResult<Payment> create(Payment payment){
@@ -25,5 +26,16 @@ public class OrderController {
     @GetMapping(value = "/consumer/payment/{id}")
     public CommonResult<Payment> getPaymentById(@PathVariable("id") Long id){
         return restTemplate.getForObject(PAYMENT_URL+"/payment/"+id,CommonResult.class);
+    }
+
+    @GetMapping("/consumer/payment/getForEntity/{id}")
+    public CommonResult<Payment> getPaymentById2(@PathVariable("id") Long id){
+        ResponseEntity<CommonResult> entity = restTemplate.getForEntity(PAYMENT_URL + "/payment/" + id, CommonResult.class);
+
+        if(entity.getStatusCode().is2xxSuccessful()){
+            return entity.getBody();
+        }else {
+            return new CommonResult<Payment>(444,"操作失败");
+        }
     }
 }
